@@ -1,0 +1,98 @@
+<head>
+    <title>Registration</title>
+</head>
+<body>
+    <div class="container-fluid d-flex" style="height: 46.6rem">
+        <div class="col d-flex justify-content-center">
+            <div class="card " style="width: 30rem; height: max-content; margin-top: 4rem;">
+                <div class="card-body">
+                    <div class="container">
+                        <div>
+                            <img src="../../../favicon.ico" alt="Logo" width="100" height="100" style="float: left; margin-right: 2rem;">
+                        </div>
+                        <div class="text-center">
+                            <h1> Welcome to Hikovago! </h1>
+                            <br>
+                            <h4>Register</h4>
+                        </div>
+                        <div *ngIf="showError" class="alert alert-danger" role="alert">
+                            <span [innerHTML]="errorMessage"></span>
+                        </div>    
+
+                    </div>
+                    <form [formGroup]="registerForm" autocomplete="off" novalidate (ngSubmit)="registerUser(registerForm.value)">
+                        <label for="">I'd like to register as...</label>
+                        <div class="form-check">
+                            <input class="form-check-input" formControlName="roles" type="radio" name="roles" id="consumer" value="Consumer" checked>
+                            <label class="form-check-label" for="consumer">
+                              Traveller!
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" formControlName="roles" type="radio" name="roles" id="producer" value="producer">
+                            <label class="form-check-label" for="producer">
+                              Hotel Manager.
+                            </label>
+                          </div>
+                          <div class="form-check disabled">
+                            <input class="form-check-input" disabled type="radio" name="roles" id="exampleRadios3" value="Nothing">
+                            <label class="form-check-label" for="exampleRadios3">
+                              Admin?
+                            </label>
+                          </div>
+                            
+
+                        <div class="mb-3 row">
+                            <label for="firstName" class="col-form-label col-sm-3">First Name:</label>
+                            <div class="col-md-6">
+                                <input type="text" id="firstName" formControlName="firstName" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="lastName" class="col-form-label col-sm-3">Last Name:</label>
+                            <div class="col-md-6">
+                                <input type="text" id="lastName" formControlName="lastName" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="email" class="col-form-label col-sm-3">Email:</label>
+                            <div class="col-md-9">
+                                <input type="email" id="email" formControlName="email" class="form-control" />
+                            </div>
+                            <div class="col-md-8">
+                                <em *ngIf="validateControl('email') && hasError('email', 'email')">Please provide a valid email</em>
+                                <em *ngIf="validateControl('email') && hasError('email', 'required')">Email is required</em>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="password" class="col-form-label col-sm-3">Password:</label>
+                            <div class="col-md-7">
+                                <input type="password" id="password" formControlName="password" class="form-control" />
+                            </div>
+                            <div class="col-md-7">
+                                <em *ngIf="validateControl('password') && hasError('password', 'required')">Password is required</em>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="confirm" class="col-form-label col-sm-3">Confirm:</label>
+                            <div class="col-md-7">
+                                <input type="password" id="confirm" formControlName="confirm" class="form-control" />
+                            </div>
+                            <div class="col-md-7">
+                                <em *ngIf="validateControl('confirm') && hasError('confirm', 'required')">Confirmation is required</em>
+                                <em *ngIf="hasError('confirm', 'mustMatch')">Passwords must match</em>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="mb-3 row">
+                            <div class="col-md-1">          
+                                <button type="submit" class="btn btn-success" [disabled]="!registerForm.valid">Register</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>

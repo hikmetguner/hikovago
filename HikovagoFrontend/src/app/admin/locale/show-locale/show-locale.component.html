@@ -1,0 +1,313 @@
+<body>
+    <!-- COUNTRY -->
+    <div class="container margin">
+        <div class="card" style="width: 50rem; background: rgba(155, 240, 236, 0.448); backdrop-filter: blur(8px);">
+            <div class="card-body" [style.height.rem]="14 + (countryP.currentPageSize) * 3">
+                <div class="container">
+                    <h2 class="sub-header">Countries</h2>
+                    <div class="d-flex mb-3" role="search">
+                        <div class="col-xs-4">
+                            <input class="form-control me-2" type="search" (keyup)="countryP.searchChanged($event)" [(ngModel)]="countryP.search" placeholder="Search" aria-label="Search">
+                        </div>
+                        <select class="sort-margin" name="Sort By" [(ngModel)]="countryP.sortBy" (change)="countryP.sortByChanged($event)" id="sortBy">
+                            <option value="id">ID</option>
+                            <option value="cityName">Name</option>
+                            <option value="countryName">Country</option>
+                        </select>
+                        <select class="sort-margin" name="Ascending/Descending" [(ngModel)]="countryP.asc" (change)="countryP.ascChanged($event)" id="Ascending">
+                            <option value="true">ASC</option>
+                            <option value="false">DESC</option>
+                        </select>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-success rounded" data-bs-toggle="modal" data-bs-target="#newCountry">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+                            </svg>
+                            New
+                        </button>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-striped table-sm align-left">
+                                <thead>
+                                    <th class="col-5 ">ID</th>
+                                    <th class="col-4 ">Name</th>  
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let country of countryP.countryPaged|async">
+                                        <td class="col-5 border" style="overflow: hidden">{{country.id}}</td>
+                                        <td class="col-4">{{country.name}}</td>
+                                        <td style="text-align: right;">
+                                            <button class="btn btn-outline-primary me-2 mb-1 rounded">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                                </svg>
+                                            </button>
+                                            <button class="btn btn-outline-danger me-2 mb-1 rounded">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>   
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container fixed-position" style="margin-left: 1%;">
+                <nav aria-label="Page navigation example" >
+                    <ul class="pagination">
+                        <!-- FIRST -->
+                        <li class="page-item">
+                            <button class="btn icon-button" [style.width.px]="10" (click)="countryP.firstPage()" [disabled]="countryP.prevDisabled">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                                    <path fill-rule="evenodd" d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                                </svg>
+                            </button>
+                        </li>
+                        <!-- PREV -->
+                        <li class="page-item">
+                            <button class="btn" [style.width.px]="10" (click)="countryP.changePage(true)" [disabled]="countryP.prevDisabled">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                                </svg>
+                            </button>
+                        </li>
+                        <!-- MANUAL INPUT -->
+                        <li class="page-item">
+                            <input class="form-control me-2 input-margin" [style.width.rem] = "(countryP.page / 10) + 2" style="text-align: center;" type="numeric" (change)="countryP.pageChanged($event)" [(ngModel)]="countryP.page" placeholder="Page" aria-label="Page">
+                        </li>
+                        <!-- NEXT -->
+                        <li class="page-item" style="border: none;">
+                            <button class="btn"  [style.width.px]="10" (click)="countryP.changePage(false)" [disabled]="countryP.nextDisabled">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                </svg>
+                            </button>
+                        </li>
+                        <!-- LAST -->
+                        <li class="page-item">
+                            <button class="btn"  [style.width.px]="10" (click)="countryP.lastPage()" [disabled]="countryP.nextDisabled">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                    <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                </svg>
+                            </button>
+                        </li>
+                        <li class="page-item">
+                            <label style="width: 100px; margin-left: 13rem; font-size: larger;" for="PageSize">Page Size:</label>
+                        </li>
+                        <li class="page-item" style="float: right">
+                            <input class="form-control me-2" [style.width.rem] = "4" type="number" style="align-self: right; text-align:center;" (change)="countryP.changePageSize($event)" [(ngModel)]="countryP.pageSize" placeholder="Page Size" aria-label="PageSize">
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- CITY -->
+
+    <div class="container margin">
+        <div class="card" style="width: 50rem; background: rgba(155, 240, 236, 0.448);">
+            <div class="card-body" [style.height.rem]="9 + (cityP.currentPageSize) * 3">
+                <div class="container">
+                    <h2 class="sub-header">Cities</h2>
+                    <div class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" (keyup)="cityP.searchChanged($event)" [(ngModel)]="cityP.search" placeholder="Search" aria-label="Search">
+                        <select class="sort-margin" name="Sort By" [(ngModel)]="cityP.sortBy" (change)="cityP.sortByChanged($event)" id="sortBy">
+                            <option value="id">ID</option>
+                            <option value="cityName">Name</option>
+                            <option value="countryName">Country</option>
+                        </select>
+                        <select class="sort-margin" name="Ascending/Descending" [(ngModel)]="cityP.asc" (change)="cityP.ascChanged($event)" id="Ascending">
+                            <option value="true">ASC</option>
+                            <option value="false">DESC</option>
+                        </select>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newCity">
+                            New
+                        </button>
+                    </div>
+                    <div>
+                        <table class="table table-striped table-sm align-left">
+                            <thead>
+                                <th>ID</th>
+                                <th>City</th>
+                                <th>Country</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let city of cityP.cityPaged|async">
+                                    <td>{{city.cityId}}</td>
+                                    <td>{{city.cityName}}</td>
+                                    <td>{{countriesMap.get(city.countryId)}}</td>
+                                    <td style="text-align: right;">
+                                        <button class="btn btn-outline-primary me-2 mb-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                            </svg>
+                                        </button>
+                                        <button class="btn btn-outline-danger me-2 mb-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>   
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE NAV -->
+
+            <div class="container fixed-position">
+                <nav aria-label="Page navigation example" >
+                    <ul class="pagination">
+                      <li class="page-item"><button class="page-link" (click)="cityP.changePage(true)" [disabled]="cityP.prevDisabled">Previous</button></li>
+                      <li class="page-item"><input class="form-control me-2 input-margin" [style.width.rem] = "4" style="text-align: center;" type="numeric" (change)="cityP.pageChanged($event)" [(ngModel)]="cityP.page" placeholder="Page" aria-label="Page">
+                      <li class="page-item"><button class="page-link" (click)="cityP.changePage(false)" [disabled]="cityP.nextDisabled">Next</button></li>
+                      <li class="page-item"><label style="width: 100px; margin-left: 13rem; font-size: larger;" for="PageSize">Page Size:</label></li>
+                      <li class="page-item"><input class="form-control me-2" [style.width.rem] = "4" type="number" style="align-self: right; text-align:center;" (change)="cityP.changePageSize($event)" [(ngModel)]="cityP.pageSize" placeholder="Page Size" aria-label="PageSize">
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- COUNTY -->
+    <div class="container margin">
+        <div class="card" style="width: 50rem; background: rgba(155, 240, 236, 0.448);">
+            <div class="card-body" [style.height.rem]="9 + (countyP.currentPageSize) * 3">
+                <div class="container">
+                    <h2 class="sub-header">Counties</h2>
+                    <div class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" (keyup)="countyP.searchChanged($event)" [(ngModel)]="countyP.search" placeholder="Search" aria-label="Search">
+                        <select class="sort-margin" name="Sort By" [(ngModel)]="countyP.sortBy" (change)="countyP.sortByChanged($event)" id="sortBy">
+                            <option value="id">ID</option>
+                            <option value="cityName">Name</option>
+                            <option value="countryName">Country</option>
+                        </select>
+                        <select class="sort-margin" name="Ascending/Descending" [(ngModel)]="countyP.asc" (change)="countyP.ascChanged($event)" id="Ascending">
+                            <option value="true">ASC</option>
+                            <option value="false">DESC</option>
+                        </select>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newCounty">
+                            New
+                        </button>
+                    </div>
+                    <div>
+                        <table class="table table-striped table-sm align-left">
+                            <thead>
+                                <th class="col-2">ID</th>
+                                <th>County</th>
+                                <th>City</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let county of countyP.countyPaged|async">
+                                    <td>{{county.countyId}}</td>
+                                    <td>{{county.countyName}}</td>
+                                    <td>{{citiesMap.get(county.cityId)}}</td>
+                                    <td style="text-align: right;">
+                                        <button class="btn btn-outline-primary me-2 mb-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                            </svg>
+                                        </button>
+                                        <button class="btn btn-outline-danger me-2 mb-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>   
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE NAV -->
+
+            <div class="container fixed-position">
+                <nav aria-label="Page navigation example" >
+                    <ul class="pagination">
+                        <li class="page-item"><button class="page-link" (click)="countyP.changePage(true)" [disabled]="countyP.prevDisabled">Previous</button></li>
+                        <li class="page-item"><input class="form-control me-2 input-margin" [style.width.rem] = "4" style="text-align: center;" type="numeric" (change)="countyP.pageChanged($event)" [(ngModel)]="countyP.page" placeholder="Page" aria-label="Page">
+                        <li class="page-item"><button class="page-link" (click)="countyP.changePage(false)" [disabled]="countyP.nextDisabled">Next</button></li>
+                        <li class="page-item"><label style="width: 100px; margin-left: 13rem; font-size: larger;" for="PageSize">Page Size:</label></li>
+                        <li class="page-item"><input class="form-control me-2" [style.width.rem] = "4" type="number" style="align-self: right; text-align:center;" (change)="countyP.changePageSize($event)" [(ngModel)]="countyP.pageSize" placeholder="Page Size" aria-label="PageSize">
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+  
+  <!-- Country Modal -->
+    <div class="modal fade" id="newCountry" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <app-add-edit-country [country]="country" ></app-add-edit-country>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Understood</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- City Modal -->
+     <div class="modal fade" id="newCity" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <app-add-edit-city></app-add-edit-city>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard</button>
+                    <button type="button" class="btn btn-primary">Understood</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- County Modal -->
+     <div class="modal fade" id="newCounty" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <app-add-edit-county></app-add-edit-county>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Understood</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+

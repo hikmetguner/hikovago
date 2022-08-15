@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<body>
+  <div class="alert alert-success position-absolute" role="alert" *ngIf="showSuccess" style="width:50rem; top: 93%; left:30%;">
+    {{message}}
+  </div>
+  <div class="alert alert-danger position-absolute" role="alert" *ngIf="showError" style="width:50rem; top: 93%; left:30%;">
+    {{message}}
+  </div>
+
+    <div style="height: 40.8rem;">
+        <div class="card" style="width: 1000px; height: 600px; margin-top: 6rem; margin-left: 3rem; backdrop-filter: blur(10px); background: none;">
+            <!-- Button trigger modal -->
+                <div class="row" style="display: table; height: 80px; overflow: hidden;">
+                    <div class="col-md-2" style="display: table-cell; vertical-align: middle; text-align: center; margin-left: 2rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-chat-left-text" viewBox="0 0 16 16">
+                            <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                            <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                        </svg>
+                    </div>
+                    <div class="col-md-6" style="display: table-cell; vertical-align: middle;">
+                        <h2>Comments Table</h2>
+                    </div>
+                    <div class="col-md-3" style="display: table-cell; vertical-align: middle;">
+                        <button type="button" (click)="modal()" class="btn btn-success modal-button" data-toggle="modal" data-target="#modal" *ngIf="selection == null">
+                            Add
+                        </button>
+                        <button type="button" class="btn btn-danger modal-button mr-3" data-toggle="modal" data-target="#confirmModal" *ngIf="selection !=null">
+                            Delete
+                        </button>
+                        <button type="button" (click)="modal()" class="btn btn-primary modal-button" data-toggle="modal" data-target="#modal" *ngIf="selection !=null">
+                            Edit
+                        </button>
+                    </div>
+                </div>
+
+            <ag-grid-angular
+                class="ag-theme-alpine"
+                style="height: 500px;width: 900px; margin-left: 2rem;"
+                (gridReady)="onGridReady($event)"
+                (selectionChanged)="changeSelection()"
+                [rowData] = "rowData | async"
+                [columnDefs] = "colDefs"
+                [defaultColDef] = "defaultColDefs"
+                [rowGroupPanelShow]="'always'"
+                [rowSelection]="'single'"
+                [pagination]="true"
+                [animateRows]="true">
+            
+            </ag-grid-angular>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{modalTitle}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                        <div class="modal-body">
+                            <label class="form-label" for="id">Id</label>
+                            <input class="form-control" type="text" formControlName="id" id="id">
+
+                            <label class="form-label" for="user">User</label>
+                            <select class="form-control form-control-lg" formControlName="userId" id="user">
+                              <option value="" [disabled]="true">Select</option>
+                              <option *ngFor="let user  of userMap | keyvalue" [ngValue]="user.key">{{user.value}}</option>
+                            </select>
+
+                            <label class="form-label" for="hotel">Hotel</label>
+                            <select class="form-control form-control-lg" formControlName="hotelId" id="hotel">
+                              <option value="" [disabled]="true">Select</option>
+                              <option *ngFor="let hotel  of hotelMap | keyvalue" [ngValue]="hotel.key">{{hotel.value}}</option>
+                            </select>
+
+                            <label class="form-label" for="rating">Rating</label>
+                            <select class="form-control form-control-lg" formControlName="rating" id="rating">
+                                <option value="" [disabled]="true">Select</option>
+                                <option value="1">
+                                    ★☆☆☆☆
+                                </option>
+                                <option value="2">
+                                    ★★☆☆☆
+                                </option>
+                                <option value="3">
+                                    ★★★☆☆
+                                </option>
+                                <option value="4">
+                                    ★★★★☆
+                                </option>
+                                <option value="5">
+                                    ★★★★★
+                                </option>
+                            </select>
+
+                            <label class="form-label" for="title">Title</label>
+                            <input class="form-control" type="text" formControlName="title" id="title" maxlength="120">
+
+                            <label class="form-label" for="text">Comment</label>
+                            <textarea class="form-control" formControlName="text" id="text" rows="3" placeholder="Comment..."></textarea>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"(click)="onClose()" data-dismiss="modal">Close</button>
+                            <button type="submit" [disabled]="!form.valid" [formGroup]="form" class="btn btn-primary">{{submitButton}}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header alert-danger">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Confirm action</h5>
+                </div>
+                <div class="modal-body" *ngIf="selection!=null">
+                  Do you want to delete {{selection.name}}? This action cannot be undone.
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                  <button type="button" (click)="delete()" class="btn btn-danger" data-dismiss="modal">Yes</button>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+</body>

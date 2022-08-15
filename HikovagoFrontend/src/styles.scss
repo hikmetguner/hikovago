@@ -1,0 +1,7 @@
+@import '~@angular/material/theming';
+
+// always include only once per project
+@include mat-core();
+
+@import 'ag-grid-community/dist/styles/ag-grid.css';
+@import 'ag-grid-community/dist/styles/ag-theme-alpine.css';

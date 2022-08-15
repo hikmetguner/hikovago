@@ -1,0 +1,57 @@
+
+<div class="alert alert-success position-absolute" role="alert" *ngIf="showSuccess" style="width:50rem; top: 93%; left:30%;">
+    {{message}}
+</div>
+<div class="alert alert-danger position-absolute" role="alert" *ngIf="showError" style="width:50rem; top: 93%; left:30%;">
+    {{message}}
+</div>
+
+<div class="main-div">
+    <div class="card border rounded-circle border-primary" style="text-align:center; width: fit-content; height: fit-content; margin-left: 44.5%; margin-bottom: 3%; background-color: cornflowerblue;">
+        <div class="card-body" style="text-align: center; width: fit-content; height: fit-content;" *ngIf="user != null">
+            <img  class="rounded-circle" src="data:image/{{dataType}};base64,{{user.media.data}}" alt="ProfPicture" style="background-color: white; width: 128px; width: 128px;">
+        </div>    
+    </div>
+    <div class="card-group">
+        <div class="card overflow-auto" style="width: 20rem; height: 20rem; margin-left: 5%; float: right;">
+            <div class="card-body">
+                <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                        <label class="form-label" for="email">Email</label>
+                        <input class="form-control" type="text" formControlName="email" id="email" maxlength="100" style="margin-bottom: 2%;">
+    
+                        <div class="row">
+                            <div class="col">
+                                <label class="form-label" for="firstName">First Name</label>
+                                <input class="form-control" type="text" formControlName="firstName" id="firstName" style="margin-bottom: 2%;">
+                            </div>
+                            <div class="col">
+                                <label class="form-label" for="lastName">Last Name</label>
+                                <input class="form-control" type="text" formControlName="lastName" id="lastName">
+                            </div>
+                        </div>
+          
+                        <label for="image">Profile Picture</label>
+                        <br>
+                        <input type="file" name="media" id="media" class="form-control" (change)="onFileSelect($event)" style="margin-bottom: 2%;">
+    
+                        <button type="submit" [disabled]="!form.valid || form.pristine" [formGroup]="form" class="btn btn-success" style="margin-left: 89.9%;">Save</button>
+    
+                </form>
+            </div>
+        </div>
+        <div class="card overflow-auto border-secondary" style="width: 30%; height: 50%; margin-left: 5%; height: 20rem;">
+            <h2 class="card-header">Comments</h2>
+            <div class="card-body">
+                <div class="card row border-primary" style="width:30rem; margin: 2%"  *ngFor="let comment of comments">
+                    <h4 class="card-header">{{hotelMap.get(comment.hotelId)}}</h4>
+                    <h4 class="card-title">{{comment.title}}</h4>
+                    <p class="card-text">{{comment.text}}</p>
+                    <div class="card-footer bg-transparent border-success">{{getStars(comment.rating)}}</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

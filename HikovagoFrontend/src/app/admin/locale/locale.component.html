@@ -1,0 +1,273 @@
+<body>
+
+    <!--  ALERTS  -->                       
+    <div class="alert alert-success position-absolute" role="alert" *ngIf="showSuccess" style="width:50rem; top: 93%; left:30%;">
+        {{message}}
+    </div>
+    <div class="alert alert-danger position-absolute" role="alert" *ngIf="showError" style="width:50rem; top: 93%; left:30%;">
+        {{message}}
+    </div>
+
+    <div style="height: 40.8rem;">
+        <!--Country Card-->
+        <div class="card" style="width: 1000px; height: 600px; margin-top: 6rem; margin-left: 3rem; backdrop-filter: blur(20px); background: none;">
+            <div class="row" style="display: table; height: 80px; overflow: hidden;">
+                <div class="col-md-2" style="display: table-cell; vertical-align: middle; text-align: center; margin-left: 2rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-globe" viewBox="0 0 16 16">
+                        <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z"/>
+                    </svg>
+                </div>
+                <div class="col-md-6" style="display: table-cell; vertical-align: middle;">
+                    <h2>Countries Table</h2>
+                </div>
+                <div class="col-md-3" style="display: table-cell; vertical-align: middle;">
+                    <button type="button" (click)="countryModal()" class="btn btn-success modal-button" data-toggle="modal" data-target="#countryModal" *ngIf="countrySelection == null">
+                        Add
+                    </button>
+                    <button type="button" class="btn btn-danger modal-button mr-3" data-toggle="modal" data-target="#confirmCountry" *ngIf="countrySelection !=null">
+                        Delete
+                    </button>
+                    <button type="button" (click)="countryModal()" class="btn btn-primary modal-button" data-toggle="modal" data-target="#countryModal" *ngIf="countrySelection !=null">
+                        Edit
+                    </button>
+                </div>
+            </div>
+            <ag-grid-angular
+                class="ag-theme-alpine"
+                style="height: 500px;width: 900px; margin: 2rem;"
+                (gridReady)="onCountryReady($event)"
+                (selectionChanged)="changeCountrySelection()"
+                [rowData] = "countryData | async"
+                [columnDefs] = "countryDefs"
+                [defaultColDef] = "defaultColDefs"
+                [rowSelection]="'single'"
+                [pagination]="true"
+                [paginationAutoPageSize]="true"
+                [animateRows]="true">
+            
+            </ag-grid-angular>
+        </div>
+
+        <!--City Card-->
+        <div class="card" style="width: 1000px; height: 600px; margin-top: 6rem; margin-left: 3rem; backdrop-filter: blur(20px); background: none;">
+            <div class="row" style="display: table; height: 80px; overflow: hidden;">
+                <div class="col-md-2" style="display: table-cell; vertical-align: middle; text-align: center; margin-left: 2rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-globe" viewBox="0 0 16 16">
+                        <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z"/>
+                    </svg>
+                </div>
+                <div class="col-md-6" style="display: table-cell; vertical-align: middle;">
+                    <h2>Cities Table</h2>
+                </div>
+                <div class="col-md-3" style="display: table-cell; vertical-align: middle;">
+                    <button type="button" (click)="cityModal()" class="btn btn-success modal-button" data-toggle="modal" data-target="#cityModal" *ngIf="citySelection == null">
+                        Add
+                    </button>
+                    <button type="button" class="btn btn-danger modal-button mr-3" data-toggle="modal" data-target="#confirmCity" *ngIf="citySelection !=null">
+                        Delete
+                    </button>
+                    <button type="button" (click)="cityModal()" class="btn btn-primary modal-button" data-toggle="modal" data-target="#cityModal" *ngIf="citySelection !=null">
+                        Edit
+                    </button>
+                </div>
+            </div>
+            
+            <ag-grid-angular
+                class="ag-theme-alpine"
+                style="height: 500px;width: 900px; margin: 2rem;"
+                (gridReady)="onCityReady($event)"
+                (selectionChanged)="changeCitySelection()"
+                [rowData] = "cityData | async"
+                [columnDefs] = "cityDefs"
+                [defaultColDef] = "defaultColDefs"
+                [rowSelection]="'single'"
+                [rowGroupPanelShow]="'always'"
+                [pagination]="true"
+                [paginationPageSize]="10"
+                [animateRows]="true">
+            
+            </ag-grid-angular>
+        </div>
+
+        <!--County Card-->
+        <div class="card" style="width: 1000px; height: 600px; margin-top: 6rem; margin-left: 3rem; backdrop-filter: blur(20px); background: none;">
+            <div class="row" style="display: table; height: 80px; overflow: hidden;">
+                <div class="col-md-2" style="display: table-cell; vertical-align: middle; text-align: center; margin-left: 2rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-globe" viewBox="0 0 16 16">
+                        <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z"/>
+                    </svg>
+                </div>
+                <div class="col-md-6" style="display: table-cell; vertical-align: middle;">
+                    <h2>Counties Table</h2>
+                </div>
+                <div class="col-md-3" style="display: table-cell; vertical-align: middle;">
+                    <button type="button" (click)="countyModal()" class="btn btn-success modal-button" data-toggle="modal" data-target="#countyModal" *ngIf="countySelection == null">
+                        Add
+                    </button>
+                    <button type="button" class="btn btn-danger modal-button mr-3" data-toggle="modal" data-target="#confirmCounty" *ngIf="countySelection !=null">
+                        Delete
+                    </button>
+                    <button type="button" (click)="countyModal()" class="btn btn-primary modal-button" data-toggle="modal" data-target="#countyModal" *ngIf="countySelection !=null">
+                        Edit
+                    </button>
+                </div>
+            </div>
+            <ag-grid-angular
+                class="ag-theme-alpine"
+                style="height: 500px;width: 900px; margin: 2rem;"
+                (gridReady)="onCountyReady($event)"
+                (selectionChanged)="changeCountySelection()"
+                [rowData] = "countyData | async"
+                [columnDefs] = "countyDefs"
+                [defaultColDef] = "defaultColDefs"
+                [rowSelection]="'single'"
+                [rowGroupPanelShow]="'always'"
+                [pagination]="true"
+                [paginationAutoPageSize]="true"
+                [animateRows]="true">
+            
+            </ag-grid-angular>
+        </div>
+    </div>
+
+    <!-- Country Modal -->
+    <div class="modal fade" id="countryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{countryModalTitle}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="countryForm" (ngSubmit)="onCountrySubmit()">
+                    <div class="modal-body">
+                            <label class="form-label" for="id">Id</label>
+                            <input class="form-control" type="text" formControlName="id" id="id">
+                            <label class="form-label" for="name">Name</label>
+                            <input class="form-control" type="text" formControlName="name" id="name">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" [disabled]="!countryForm.valid" [formGroup]="countryForm" class="btn btn-primary">{{countryModalSubmitButton}}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmCountry" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header alert-danger">
+                <h5 class="modal-title" id="exampleModalLongTitle">Confirm action</h5>
+            </div>
+            <div class="modal-body" *ngIf="countrySelection!=null">
+                Do you want to delete {{countrySelection.name}}? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" (click)="deleteCountry()" class="btn btn-danger" data-dismiss="modal">Yes</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- City Modal -->
+    <div class="modal fade" id="cityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{cityModalTitle}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="cityForm" (ngSubmit)="onCitySubmit()">
+                    <div class="modal-body">
+                            <label class="form-label" for="id">Id</label>
+                            <input class="form-control" type="text" formControlName="id" id="id">
+                            <label class="form-label" for="country">Country</label>
+                            <select class="form-control form-control-lg" formControlName="countryId" id="country">
+                                <option *ngFor="let country  of countryMap | keyvalue" [ngValue]="country.key">{{country.value}}</option>
+                            </select>
+                            <label class="form-label" for="name">Name</label>
+                            <input class="form-control" type="text" formControlName="name" id="name">
+                            
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" [disabled]="!cityForm.valid" [formGroup]="cityForm" class="btn btn-primary">{{cityModalSubmitButton}}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmCity" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header alert-danger">
+                <h5 class="modal-title" id="exampleModalLongTitle">Confirm action</h5>
+            </div>
+            <div class="modal-body" *ngIf="citySelection!=null">
+                Do you want to delete {{citySelection.name}}? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" (click)="deleteCity()" class="btn btn-danger" data-dismiss="modal">Yes</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- County Modal -->
+    <div class="modal fade" id="countyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{{countyModalTitle}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form [formGroup]="countyForm" (ngSubmit)="onCountySubmit()">
+                    <div class="modal-body">
+                            <label class="form-label" for="id">Id</label>
+                            <input class="form-control" type="text" formControlName="id" id="id">
+                            <label class="form-label" for="city">City</label>
+                            <select class="form-control form-control-lg" formControlName="cityId" id="city">
+                                <option [ngValue]="" [disabled]="true">City</option>
+                                <option *ngFor="let city  of cityMap | keyvalue" [ngValue]="city.key">{{city.value}}</option>
+                            </select>
+                            <label class="form-label" for="name">Name</label>
+                            <input class="form-control" type="text" formControlName="name" id="name">
+                            
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" [disabled]="!countyForm.valid" [formGroup]="countyForm" class="btn btn-primary">{{countyModalSubmitButton}}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmCounty" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header alert-danger">
+                <h5 class="modal-title" id="exampleModalLongTitle">Confirm action</h5>
+            </div>
+            <div class="modal-body" *ngIf="countySelection!=null">
+                Do you want to delete {{countySelection.name}}? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" (click)="deleteCounty()" class="btn btn-danger" data-dismiss="modal">Yes</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+</body>

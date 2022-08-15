@@ -1,0 +1,117 @@
+<body>
+  <div class="alert alert-success position-absolute" role="alert" *ngIf="showSuccess" style="width:50rem; top: 93%; left:30%;">
+    {{message}}
+  </div>
+  <div class="alert alert-danger position-absolute" role="alert" *ngIf="showError" style="width:50rem; top: 93%; left:30%;">
+    {{message}}
+  </div>
+
+    <div style="height: 40.8rem;">
+        <div class="card" style="width: 1000px; height: 600px; margin-top: 6rem; margin-left: 3rem; backdrop-filter: blur(10px); background: none;">
+            <!-- Button trigger modal -->
+                <div class="row" style="display: table; height: 80px; overflow: hidden;">
+                    <div class="col-md-2" style="display: table-cell; vertical-align: middle; text-align: center; margin-left: 2rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
+                            <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                        </svg>
+                    </div>
+                    <div class="col-md-6" style="display: table-cell; vertical-align: middle;">
+                        <h2>Users Table</h2>
+                    </div>
+                    <div class="col-md-3" style="display: table-cell; vertical-align: middle;">
+                        <button type="button" class="btn btn-danger modal-button mr-3" data-toggle="modal" data-target="#confirmModal" *ngIf="selection !=null">
+                            Delete
+                        </button>
+                        <button type="button" (click)="modal()" class="btn btn-primary modal-button" data-toggle="modal" data-target="#modal" *ngIf="selection !=null">
+                            Edit
+                        </button>
+                    </div>
+                </div>
+
+            <ag-grid-angular
+                class="ag-theme-alpine"
+                style="height: 500px;width: 900px; margin-left: 2rem;"
+                (gridReady)="onGridReady($event)"
+                (selectionChanged)="changeSelection()"
+                [rowData] = "rowData | async"
+                [columnDefs] = "colDefs"
+                [defaultColDef] = "defaultColDefs"
+                [rowGroupPanelShow]="'always'"
+                [rowSelection]="'single'"
+                [pagination]="true"
+                [animateRows]="true">
+            
+            </ag-grid-angular>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{modalTitle}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                        <div class="modal-body">
+                            <label class="form-label" for="id">Id</label>
+                            <input class="form-control" type="text" formControlName="id" id="id">
+
+                            <label class="form-label" for="email">Email</label>
+                            <input class="form-control" type="text" formControlName="email" id="email" maxlength="100">
+
+                            <label class="form-label" for="emailConfirmed">Email Confirmed</label>
+                            <select class="form-control form-control-lg" formControlName="emailConfirmed" id="emailConfirmed">
+                                <option [ngValue]="true">True</option>
+                                <option [ngValue]="false">False</option>
+                            </select>
+
+                            <label class="form-label" for="firstName">First Name</label>
+                            <input class="form-control" type="text" formControlName="firstName" id="firstName">
+
+                            <label class="form-label" for="lastName">Last Name</label>
+                            <input class="form-control" type="text" formControlName="lastName" id="lastName">
+
+                            <label class="form-label" for="mediaId">MediaId</label>
+                            <input class="form-control" type="text" formControlName="mediaId" id="mediaId">
+
+
+                            <label for="image">File Upload</label>
+                            <br>
+                            <input type="file" class="form-control" name="media" id="media" (change)="onFileSelect($event)">
+                            <div>
+                                <label class="form-label" class="form-label" for="data" *ngIf="selection != null">Profile Picture</label>
+                                <img class="form-control" *ngIf="selection != null && selection.media != null" src="data:image/jpeg;base64,{{selection.media.data}}" alt="empty" name="id" id="data" style="width: 400px; height: 200px;">
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"(click)="onClose()" data-dismiss="modal">Close</button>
+                            <button type="submit" [disabled]="!form.valid" [formGroup]="form" class="btn btn-primary">{{submitButton}}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header alert-danger">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Confirm action</h5>
+                </div>
+                <div class="modal-body" *ngIf="selection!=null">
+                  Do you want to delete {{selection.name}}? This action cannot be undone.
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                  <button type="button" (click)="delete()" class="btn btn-danger" data-dismiss="modal">Yes</button>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+</body>

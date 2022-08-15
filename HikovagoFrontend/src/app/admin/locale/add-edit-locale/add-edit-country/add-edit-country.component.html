@@ -1,0 +1,8 @@
+<form>
+    <div>
+        <label for="countryId" class="form-label" *ngIf ="countryId != 0" disabled>Country ID</label>
+        <input type="numeric" class="form-control" name="countryId" [(ngModel)] = "countryId" *ngIf ="countryId != 0" disabled>
+        <label for="countryName" class="form-label">Country Name</label>
+        <input type="text" class="form-control" [(ngModel)]="countryName" name="countryName" id="countryName">
+    </div>
+</form>

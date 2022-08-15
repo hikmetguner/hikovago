@@ -1,0 +1,12 @@
+body{
+    background-image: url('../../../assets/images/errorbg.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+.forbidden-bg{
+    background: none;
+    background-color: transparent;
+    backdrop-filter: blur(12px);
+}

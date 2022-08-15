@@ -1,0 +1,12 @@
+body{
+    background:none;
+}
+.main-div{
+    margin-top: 5rem;
+    margin-left: 5rem;
+    margin-right: 5rem;
+}
+
+.id{
+    flex: 0 0 10%;
+}

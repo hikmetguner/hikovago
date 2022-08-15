@@ -1,0 +1,49 @@
+body{
+    background-color: transparent;
+    overflow: auto;
+}
+.margin {
+    margin-top: 1cm;
+    margin-bottom: 1cm;
+    margin-left: 3cm;
+    margin-right: 3cm;
+}
+
+.fixed-table{
+    min-height: 19rem;
+    min-width:  30rem;
+}
+
+.fixed-position{
+    position: static;
+}
+
+.input-margin{
+    margin-left: 0.25cm;
+    margin-right: 0.4cm;
+}
+
+.sort-margin{
+    margin-left: 0.2cm;
+    margin-right: 0.2cm;
+}
+
+
+button:disabled {
+    color: gray
+ }
+
+ .btn {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px;
+    outline: none;
+    border: none;
+
+}
+.btn:active {
+  border-style: outset;
+  border: none;
+}

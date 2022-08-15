@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<body>
+    <div class="alert alert-success position-absolute" role="alert" *ngIf="showSuccess" style="width:50rem; top: 93%; left:30%;">
+        {{message}}
+      </div>
+      <div class="alert alert-danger position-absolute" role="alert" *ngIf="showError" style="width:50rem; top: 93%; left:30%;">
+        {{message}}
+      </div>
+    <div style="height: 40.8rem;">
+        <div class="card" style="width: 1400px; height: 600px; margin-top: 6rem; margin-left: 3rem; backdrop-filter: blur(10px); background: none;">
+            <!-- Button trigger modal -->
+                <div class="row" style="display: table; height: 80px; overflow: hidden;">
+                    <div class="col-md-2" style="display: table-cell; vertical-align: middle; text-align: center; margin-left: 2rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-building" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"/>
+                            <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"/>
+                        </svg>
+                    </div>
+                    <div class="col-md-6" style="display: table-cell; vertical-align: middle;">
+                        <h2>Hotels Table</h2>
+                    </div>
+                    <div class="col-md-3" style="display: table-cell; vertical-align: middle;">
+                        <button type="button" (click)="modal()" class="btn btn-success modal-button" data-toggle="modal" data-target="#hotelModal" *ngIf="selection == null">
+                            Add
+                        </button>
+                        <button type="button" class="btn btn-danger modal-button mr-3" data-toggle="modal" data-target="#confirmModal" *ngIf="selection !=null">
+                            Delete
+                        </button>
+                        <button type="button" (click)="modal()" class="btn btn-primary modal-button" data-toggle="modal" data-target="#hotelModal" *ngIf="selection !=null">
+                            Edit
+                        </button>
+                    </div>
+                </div>
+
+            <ag-grid-angular
+                class="ag-theme-alpine"
+                style="height: 500px;width: 1300px; margin-left: 2rem;"
+                (gridReady)="onGridReady($event)"
+                (selectionChanged)="changeSelection()"
+                [rowData] = "rowData | async"
+                [columnDefs] = "colDefs"
+                [defaultColDef] = "defaultColDefs"
+                [rowGroupPanelShow]="'always'"
+                [rowSelection]="'single'"
+                [pagination]="true"
+                [animateRows]="true">
+            
+            </ag-grid-angular>
+        </div>
+
+        <!-- Hotel Modal -->
+        <div class="modal fade" id="hotelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{modalTitle}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                        <div class="modal-body">
+                            <label class="form-label" for="name">Name</label>
+                            <input class="form-control" type="text" formControlName="name" id="name">
+
+                            <label class="form-label" for="country">Country</label>
+                            <select class="form-control form-control-lg" formControlName="countryId" id="country">
+                            <option value="" [disabled]="true">Select</option>
+                            <option *ngFor="let country  of countryMap | keyvalue" [ngValue]="country.key">{{country.value}}</option>
+                            </select>
+
+                            <label class="form-label" for="city">City</label>
+                            <select class="form-control form-control-lg" formControlName="cityId" id="city">
+                            <option value="" [disabled]="true">Select</option>
+                            <option *ngFor="let city  of formCityMap | keyvalue" [ngValue]="city.key">{{city.value}}</option>
+                            </select>
+
+                            <label class="form-label" for="county">City</label>
+                            <select class="form-control form-control-lg" formControlName="countyId" id="county">
+                            <option value="" [disabled]="true">Select</option>
+                            <option *ngFor="let county  of formCountyMap | keyvalue" [ngValue]="county.key">{{county.value}}</option>
+                            </select>
+
+                            <label class="form-label" for="address">Address</label>
+                            <input class="form-control" type="text" formControlName="address" id="address">
+
+                            <label class="form-label" for="cellphone">Phone Number</label>
+                            <input class="form-control" type="text" formControlName="cellphone" id="cellphone">
+
+                            <label class="form-label" for="description">Description</label>
+                            <input class="form-control" type="text" formControlName="description" id="description">
+
+                            <label class="form-label" for="star">Stars</label>
+                            <select class="form-control form-control-lg" formControlName="star" id="star">
+                                <option value="0" [disabled]="true">Select</option>
+                                <option value="1">
+                                    ★☆☆☆☆
+                                </option>
+                                <option value="2">
+                                    ★★☆☆☆
+                                </option>
+                                <option value="3">
+                                    ★★★☆☆
+                                </option>
+                                <option value="4">
+                                    ★★★★☆
+                                </option>
+                                <option value="5">
+                                    ★★★★★
+                                </option>
+                            </select>
+
+                            <form [formGroup]="imageForm" style="margin-top: 1rem;">
+                                <label for="image">File Upload</label>
+                                <br>
+                                <input type="file" name="image" id="image" class="form-control" formControlName="images" multiple (change)="onFileSelect($event)">
+                            </form>            
+
+                            <div *ngIf="selection != null">
+                                <label class="form-label" for="media">Medias</label>
+                                <select class="form-control" [(ngModel)] = "selectedMedia" [ngModelOptions]="{standalone: true}" id="media">
+                                  <option value="" [disabled]="true">Select</option>
+                                  <option *ngFor="let media of selection.medias" [ngValue]="media.id">{{media.name}}</option>
+                                </select>
+                                <div *ngFor="let media of selection.medias">
+                                    <label class="form-label" class="form-label" for="data">{{media.name}}</label>
+                                    <img class="form-control" src="data:image/jpeg;base64,{{media.data}}" name="id" id="data" style="width: 400px; height: 200px;">
+                                </div>
+                                <button type="button" style="margin-top:1rem" class="btn btn-danger" (click)="deleteMedia()">Delete Media</button>
+                              </div>
+    
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"(click)="onClose()" data-dismiss="modal">Close</button>
+                            <button type="submit" [disabled]="!form.valid" [formGroup]="form" class="btn btn-primary">{{submitButton}}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header alert-danger">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Confirm action</h5>
+                </div>
+                <div class="modal-body" *ngIf="selection!=null">
+                  Do you want to delete {{selection.name}}? This action cannot be undone.
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                  <button type="button" (click)="delete()" class="btn btn-danger" data-dismiss="modal">Yes</button>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+</body>
